@@ -22,8 +22,7 @@ const USERS: User[] = [
   { id: 2, username: 'bob', password: 'hunter2' },
 ];
 
-// LoginScreen Component
-function LoginScreen({
+export default function LoginScreen({
   onSuccess,
   onGoToSignUp,
 }: {
@@ -94,52 +93,6 @@ function LoginScreen({
   );
 }
 
-// Main App Component
-export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-
-  const handleLoginSuccess = (userId: number) => {
-    setCurrentUserId(userId);
-    setIsLoggedIn(true);
-  };
-
-  const handleGoToSignUp = () => {
-    // Handle sign up navigation
-    Alert.alert('Sign Up', 'Sign up functionality coming soon!');
-  };
-
-  if (!isLoggedIn) {
-    return (
-      <LoginScreen 
-        onSuccess={handleLoginSuccess}
-        onGoToSignUp={handleGoToSignUp}
-      />
-    );
-  }
-
-  return (
-    <SafeAreaView style={s.safe}>
-      <StatusBar style="dark" />
-      <View style={s.welcomeContainer}>
-        <Text style={s.welcomeTitle}>Welcome to EchoHub!</Text>
-        <Text style={s.welcomeText}>You're successfully logged in</Text>
-        <Text style={s.userInfo}>User ID: {currentUserId}</Text>
-        
-        <Pressable 
-          style={s.logoutButton} 
-          onPress={() => {
-            setIsLoggedIn(false);
-            setCurrentUserId(null);
-          }}
-        >
-          <Text style={s.buttonText}>Logout</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
-  );
-}
-
 async function persistUserId(userId: number) {
   try {
     await AsyncStorage.setItem(STORAGE_USER_ID, String(userId));
@@ -187,38 +140,4 @@ const s = StyleSheet.create({
 
   link: { alignSelf: 'center', padding: 8 },
   linkText: { color: '#2563eb', fontWeight: '600', fontSize: 14 },
-
-  // Welcome screen styles
-  welcomeContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 20,
-  },
-  welcomeTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#111827',
-    textAlign: 'center',
-  },
-  welcomeText: {
-    fontSize: 18,
-    color: '#6b7280',
-    textAlign: 'center',
-  },
-  userInfo: {
-    fontSize: 16,
-    color: '#374151',
-    marginTop: 10,
-  },
-  logoutButton: {
-    height: 48,
-    borderRadius: 10,
-    backgroundColor: '#dc2626',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 30,
-    marginTop: 20,
-  },
 });
-
