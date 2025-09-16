@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppNavigator } from './src/navigation/AppNavigator';
+import React from 'react';
+import { initDatabase } from './src/db/database';  // init db
+
+
 
 //TO DO: add login/authentication functionality
 
