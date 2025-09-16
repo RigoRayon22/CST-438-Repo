@@ -1,8 +1,11 @@
+console.log('Database functions imported:', { addUser, showAllUsers });
+
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { useEffect, useState } from 'react';
-import { initDatabase, addUser, showAllUsers, updateUser, deleteUser, deleteAllUsers, getAllUsers } from './database/database';
+import { initDatabase, addUser, showAllUsers, updateUser, deleteUser, deleteAllUsers, getAllUsers } from './src/db/database';
 import { config } from './config';  
+import { exportDatabaseData } from './src/db/database';
 
 export default function App() {
   const [ready, setReady] = useState(false);
@@ -28,7 +31,7 @@ export default function App() {
     const users = await getAllUsers();
     if (users.length > 0) {
       const firstUser = users[0];
-      await updateUser(firstUser.id, 'John Updated', 'johnupdated@example.com');
+      await updateUser((firstUser as any).id, 'John Updated', 'johnupdated@example.com');
       await showAllUsers();
     } else {
       console.log('No users to update');
@@ -39,7 +42,7 @@ export default function App() {
     const users = await getAllUsers();
     if (users.length > 1) {
       const secondUser = users[1];
-      await deleteUser(secondUser.id);
+      await deleteUser((secondUser as any).id);
       await showAllUsers();
     } else {
       console.log('Need at least 2 users to delete the second one');
@@ -63,6 +66,8 @@ export default function App() {
       <Button title="3. Update User 1" onPress={testUpdate} />
       <Button title="4. Delete User 2" onPress={testDelete} />
       <Button title="5. Delete All Users" onPress={testDeleteAll} />
+      <Button title="Export Data" onPress={exportDatabaseData} />
+
       
       <StatusBar style="auto" />
     </View>

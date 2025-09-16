@@ -5,13 +5,13 @@ const mockDatabase = {
   execAsync: jest.fn(),
   
   runAsync: jest.fn((query, params) => {
-    // CREATE - Add user
+    // CREATE - add user
     if (query.includes('INSERT')) {
       users.push({ id: 1, name: params[0], email: params[1] });
       return Promise.resolve({ lastInsertRowId: 1, changes: 1 });
     }
     
-    // UPDATE - Modify existing user
+    // UPDATE - modify existing user
     if (query.includes('UPDATE')) {
       if (users.length > 0) {
         users[0] = { id: 1, name: params[0], email: params[1] };
@@ -20,7 +20,7 @@ const mockDatabase = {
       return Promise.resolve({ changes: 0 });
     }
     
-    // DELETE - Remove users
+    // DELETE - remove users
     if (query.includes('DELETE')) {
       users = [];
       return Promise.resolve({ changes: 1 });

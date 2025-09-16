@@ -53,14 +53,14 @@ export const showAllUsers = async () => {
   console.log('==================\n');
 };
 
-// Getting user data
+// getting user data
 export const getAllUsers = async () => {
   const database = getDatabase();
   const users = await database.getAllAsync('SELECT * FROM users');
   return users;
 };
 
-// Updating existing user 
+// updating existing user 
 export const updateUser = async (id: number, name: string, email: string) => {
   const database = getDatabase();
   const result = await database.runAsync(
@@ -71,7 +71,7 @@ export const updateUser = async (id: number, name: string, email: string) => {
   return result.changes;
 };
 
-// Delete user by ID
+// delete user by ID
 export const deleteUser = async (id: number) => {
   const database = getDatabase();
   const result = await database.runAsync('DELETE FROM users WHERE id = ?', [id]);
@@ -79,10 +79,24 @@ export const deleteUser = async (id: number) => {
   return result.changes;
 };
 
-// Delete all
+// delete all
 export const deleteAllUsers = async () => {
   const database = getDatabase();
   const result = await database.runAsync('DELETE FROM users');
   console.log('All users deleted, rows affected:', result.changes);
   return result.changes;
+};
+
+export const exportDatabaseData = async () => {
+  const database = getDatabase();
+  
+  // Get all data
+  const users = await database.getAllAsync('SELECT * FROM users');
+  
+  // Log as JSON that you can copy
+  console.log('=== DATABASE EXPORT ===');
+  console.log(JSON.stringify(users, null, 2));
+  console.log('=====================');
+  
+  return users;
 };

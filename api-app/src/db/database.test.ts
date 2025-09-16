@@ -1,9 +1,9 @@
 import { initDatabase, addUser, getAllUsers, updateUser, deleteUser, deleteAllUsers } from './database';
 
-// Setup and cleanup for each test
+// setup and cleanup for test's
 beforeEach(async () => {
   await initDatabase();
-  await deleteAllUsers(); // Start with clean database
+  await deleteAllUsers(); // start with a new database
 });
 
 describe('Database CRUD Operations', () => {
