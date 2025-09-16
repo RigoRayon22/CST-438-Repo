@@ -1,12 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { AppNavigator } from './src/navigation/AppNavigator';
 
-export default function App() {
+//TO DO: add login/authentication functionality
+
+/** Main app component setting up navigation */
+export function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
   );
 }
 
@@ -18,3 +21,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
+
+/* had to run these commands in api-app directory to fix errors:
+npm install @react-navigation/native
+npm install react-native-screens react-native-safe-area-context react-native-gesture-handler react-native-reanimated react-native-get-random-values react-native-vector-icons
+npm install @react-navigation/stack @react-navigation/bottom-tabs */
+
