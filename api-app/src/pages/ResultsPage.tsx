@@ -16,7 +16,7 @@ export function ResultsPage({ navigation }: any) {
 
     return (
         <View style={styles.container}>
-        //Link back to search page to update search criteria
+            {/*Link back to search page to update search criteria*/}
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Text style={styles.backLink}>← Update search</Text>
             </TouchableOpacity>
@@ -27,7 +27,7 @@ export function ResultsPage({ navigation }: any) {
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => setSelectedEvent(item)}>
-            // filters data into EventItemComponent for cleaner display
+                        {/* filters data into EventItemComponent for cleaner display */}
                         <EventItemComponent event={item} />
                     </TouchableOpacity>
                 )}

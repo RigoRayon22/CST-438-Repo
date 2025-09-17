@@ -6,19 +6,18 @@ export function SearchPage({ navigation }: any) {
     const [showDate, setShowDate] = useState(false);
     const [showRadius, setShowRadius] = useState(false);
 
+    // Event Name and Location always visible; Date, Category, and Radius collapsible
     return (
-        // Event Name and Location always visible; Date, Category, and Radius collapsible
         <View style={styles.container}>
             <Text style={styles.header}>Search all events:</Text>
 
             <Text>Event name:</Text>
             <TextInput style={styles.input} />
 
-            //TO DO: add auto-fill for city names?
+            {/*TO DO: add auto-fill for city names?*/}
             <Text>Location:</Text>
             <TextInput style={styles.input} />
 
-        // Collapsible Date
             <TouchableOpacity onPress={() => setShowDate(!showDate)}>
                 <Text style={styles.collapsibleLabel}>Event date ▼</Text>
             </TouchableOpacity>
@@ -29,15 +28,13 @@ export function SearchPage({ navigation }: any) {
                 />
             )}
 
-        // Collapsible Category
             <Text style={styles.collapsibleLabel}>Category ▼</Text>
             <TextInput
                 placeholder="(pick later from API categories)"
                 style={styles.input}
             />
 
-        // Collapsible Radius
-            //TO DO: add slider ui for radius
+            {/*TO DO: add slider ui for radius*/}
             <TouchableOpacity onPress={() => setShowRadius(!showRadius)}>
                 <Text style={styles.collapsibleLabel}>Radius ▼</Text>
             </TouchableOpacity>

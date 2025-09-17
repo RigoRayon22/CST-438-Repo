@@ -17,16 +17,16 @@ export function ProfilePage() {
 
     return (
         <View style={styles.container}>
-        //Header with settings icon
+            {/* Header with settings icon */}
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>Username's Profile~</Text>
                 <TouchableOpacity>
-            //TO DO: add ability to change username/password or add user preferences here
+                    {/* TO DO: add ability to change username/password or add user preferences here */}
                     <Text style={styles.settingsIcon}>⚙️</Text>
                 </TouchableOpacity>
             </View>
 
-        //Saved Events
+        {/*saved events list*/}
             <Text style={styles.sectionTitle}>Your saved events:</Text>
             {dummySavedEvents.length === 0 ? (
                 <Text style={styles.emptyText}>No events saved yet</Text>
@@ -36,7 +36,7 @@ export function ProfilePage() {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => setSelectedEvent(item)}>
-                            // filters data into EventItemComponent for cleaner display
+                            {/*filters data into EventItemComponent for cleaner display*/}
                             <EventItemComponent event={item} />
                         </TouchableOpacity>
                     )}
@@ -45,8 +45,8 @@ export function ProfilePage() {
 
             <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
 
-        //Save the Dates
-        //TO DO: change to date type instead of strings
+        {/*save the dates feature*/}
+        {/*to do: change to date type instead of strings*/}
             <Text style={styles.sectionTitle}>Your save the dates:</Text>
             <Text style={styles.helperText}>Add dates you're free so we can recommend events</Text>
 
@@ -68,7 +68,7 @@ export function ProfilePage() {
                 />
             </View>
 
-    // Display saved dates with delete option
+    {/*display saved dates with delete option*/}
             {dates.map((date, index) => (
                 <View key={index} style={styles.dateRow}>
                     <Text>{date}</Text>

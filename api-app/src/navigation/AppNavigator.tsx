@@ -10,7 +10,7 @@ import { ProfilePage } from '../pages/ProfilePage';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-/** allows users to switch between search and results page and still be on home tab */
+/* allows users to switch between search and results page and still be on home tab */
 function HomeStack() {
     return (
         <Stack.Navigator>
@@ -44,7 +44,7 @@ export function AppNavigator() {
                             iconName = 'person';
                             break;
                         default:
-                            iconName = 'help-circle'; // fallback icon to make TS happy
+                            iconName = 'help-circle'; 
                     }
 
                     return <Ionicons name={iconName} size={size} color={color} />;
