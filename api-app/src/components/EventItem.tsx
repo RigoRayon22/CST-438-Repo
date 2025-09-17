@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Event } from '../../types';
-import { template } from '@babel/core';
 
 // Props (inputs) for EventItemComponent: takes a single Event object to display
 interface EventItemProps {
@@ -10,12 +9,16 @@ interface EventItemProps {
 
 /** Component for Search Result and Saved Event list event items. */
 export function EventItemComponent({ event }: EventItemProps) {
+    const date = event.dates?.start?.localDate ?? 'Unknown date';
+    const city = event._embedded?.venues?.[0]?.city?.name ?? 'Unknown city';
+
     return (
         <View style={styles.itemContainer}>
             <Text style={styles.icon}>🎵</Text>
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{event.name}</Text>
-                <Text style={styles.details}>{event.date} • {event.city}</Text>
+                <Text style={styles.details}>
+                    {date} • {city}</Text>
             </View>
             <Text style={styles.icon}>⭐</Text>
         </View>

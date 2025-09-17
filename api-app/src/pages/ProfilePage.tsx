@@ -6,7 +6,7 @@ import { EventModal } from '../components/EventModal';
 
 //sample data (to be replaced with API data)
 const dummySavedEvents: Event[] = [
-    { id: '1', name: 'Jazz Festival', date: '2025-09-25', city: 'San Francisco', category: 'Music' },
+    { id: '1', name: 'Jazz Festival', dates: { start: { localDate: '2023-10-15', localTime: '19:00' } }, _embedded: { venues: [{ city: { name: 'New Orleans' }, name: 'French Quarter' }] } },
 ];
 
 /** user profile page showing saved events and "save the dates" feature */
