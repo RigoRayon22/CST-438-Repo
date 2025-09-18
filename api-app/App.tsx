@@ -94,7 +94,7 @@ function LoginScreen({
   );
 }
 
-// Main App Component
+// THIS IS THE MISSING MAIN APP COMPONENT - THIS IS CRUCIAL!
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
@@ -105,10 +105,10 @@ export default function App() {
   };
 
   const handleGoToSignUp = () => {
-    // Handle sign up navigation
     Alert.alert('Sign Up', 'Sign up functionality coming soon!');
   };
 
+  // Show login screen if not logged in
   if (!isLoggedIn) {
     return (
       <LoginScreen 
@@ -118,6 +118,7 @@ export default function App() {
     );
   }
 
+  // Show welcome screen after login
   return (
     <SafeAreaView style={s.safe}>
       <StatusBar style="dark" />
@@ -140,6 +141,7 @@ export default function App() {
   );
 }
 
+// Helper functions
 async function persistUserId(userId: number) {
   try {
     await AsyncStorage.setItem(STORAGE_USER_ID, String(userId));
@@ -152,6 +154,7 @@ function showToast(message: string) {
   Alert.alert(APP_TAG, message);
 }
 
+// Styles
 const s = StyleSheet.create({
   safe: { 
     flex: 1, 
@@ -221,4 +224,12 @@ const s = StyleSheet.create({
     marginTop: 20,
   },
 });
+
+
+
+
+
+
+
+
 
