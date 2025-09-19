@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 
 const openDatabase = async () => {
-  return await SQLite.openDatabaseAsync('users.db');
+  return await SQLite.openDatabaseAsync('database.db');
 };
 
 export const initDatabase = async () => {
@@ -10,22 +10,22 @@ export const initDatabase = async () => {
     await db.execAsync(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        email TEXT
+        username TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL
       );
     `);
-    console.log('Users table initialized');
+    console.log('Users table initialized with username and password');
   } finally {
     await db.closeAsync();
   }
 };
 
-export const addUser = async (name: string, email: string) => {
+export const addUser = async (username: string, password: string) => {
   const db = await openDatabase();
   try {
     const result = await db.runAsync(
-      'INSERT INTO users (name, email) VALUES (?, ?)',
-      [name, email]
+      'INSERT INTO users (username, password) VALUES (?, ?)',
+      [username, password]
     );
     console.log('User added with ID:', result.lastInsertRowId);
     return result.lastInsertRowId;
