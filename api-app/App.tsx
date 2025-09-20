@@ -39,15 +39,6 @@ export function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
 export default App;
 
 
@@ -55,4 +46,3 @@ export default App;
 npm install @react-navigation/native
 npm install react-native-screens react-native-safe-area-context react-native-gesture-handler react-native-reanimated react-native-get-random-values react-native-vector-icons
 npm install @react-navigation/stack @react-navigation/bottom-tabs */
-
