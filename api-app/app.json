@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "api-app",
+    "main": "./App.tsx",
     "slug": "api-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,7 +21,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.anonymous.apiapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

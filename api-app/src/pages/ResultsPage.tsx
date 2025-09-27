@@ -1,33 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { EventItemComponent } from '../components/EventItem';
 import { EventModal } from '../components/EventModal';
 import { Event } from '../../types';
-
-//sample data (to be replaced with API data)
-const dummyResults: Event[] = [
-    { id: '1', name: 'Concert in LA', date: '2025-09-15', city: 'Los Angeles', category: 'Music' },
-    { id: '2', name: 'Art Expo', date: '2025-09-20', city: 'San Diego', category: 'Art' },
-];
+import { searchEvents } from "../api/ticketmaster";
 
 /** allows users to view search results and click on events for more details */
-export function ResultsPage({ navigation }: any) {
+export function ResultsPage({ navigation, route }: any) {
+    const { keyword } = route.params;
+    const [events, setEvents] = useState<Event[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
+    useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const results = await searchEvents(keyword);
+        setEvents(results);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchEvents();
+    }, [keyword]);
 
     return (
         <View style={styles.container}>
-        //Link back to search page to update search criteria
+            {/*Link back to search page to update search criteria*/}
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Text style={styles.backLink}>← Update search</Text>
             </TouchableOpacity>
             <Text style={styles.header}>Search Results</Text>
 
             <FlatList
-                data={dummyResults}
+                data={events}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => setSelectedEvent(item)}>
-            // filters data into EventItemComponent for cleaner display
+                        {/* filters data into EventItemComponent for cleaner display */}
                         <EventItemComponent event={item} />
                     </TouchableOpacity>
                 )}

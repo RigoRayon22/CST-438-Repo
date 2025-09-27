@@ -6,17 +6,27 @@ import { debugDatabase } from '../db/database';
 export function SearchPage({ navigation }: any) {
     const [showDate, setShowDate] = useState(false);
     const [showRadius, setShowRadius] = useState(false);
+    const [keyword, setKeyword] = useState("");
 
     useEffect(() => {
         testDB();
       }, []);
     
 
+    // Event Name and Location always visible; Date, Category, and Radius collapsible
     return (
         /* Event Name and Location always visible; Date, Category, and Radius collapsible */
         <View style={styles.container}>
             <Text style={styles.header}>Search all events:</Text>
 
+            <Text>Event Name:</Text>
+            <TextInput
+                style={styles.input}
+                value={keyword}
+                onChangeText={setKeyword}
+                placeholder="Enter event name"
+            />
+            {/*TO DO: add auto-fill for city names?*/}
             <Text>Event name:</Text>
             
             <TextInput style={styles.input} />
@@ -45,6 +55,7 @@ export function SearchPage({ navigation }: any) {
                 style={styles.input}
             />
 
+            {/*TO DO: add slider ui for radius*/}
         {/* Collapsible Radius */}
             {/* TO DO: add slider ui for radius */}
             <TouchableOpacity onPress={() => setShowRadius(!showRadius)}>
@@ -59,7 +70,7 @@ export function SearchPage({ navigation }: any) {
 
             <Button
                 title="Search"
-                onPress={() => navigation.navigate('Results')}
+                onPress={() => navigation.navigate("Results", { keyword })}
             />
         </View>
     );

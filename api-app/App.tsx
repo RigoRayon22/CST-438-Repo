@@ -2,15 +2,12 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import React, { useState, useEffect } from 'react';
-import { initDatabase } from './src/db/database'; // init db
-import LoginScreen from './src/pages/LoginPage'; // Import your LoginScreen component
-import SignUpScreen from './src/pages/SignUpPage'; // Import your SignUpScreen component
+import { initDatabase } from './src/db/database';
+import LoginScreen from './src/pages/LoginPage';
+import SignUpPage from './src/pages/SignUpPage';
+import { UserProvider } from './src/contexts/UserContext';
 
-//TO DO: add login/authentication functionality
-/** Main app component setting up navigation */
 export function App() {
-
-  // Initialize database when app starts
   useEffect(() => {
     initDatabase().catch(console.error);
   }, []);
@@ -20,12 +17,12 @@ export function App() {
 
   const handleLoginSuccess = (userId: number) => {
     setCurrentUserId(userId);
-    setCurrentScreen('app'); // Go directly to main app after login
+    setCurrentScreen('app');
   };
 
   const handleSignUpSuccess = (userId: number) => {
     setCurrentUserId(userId);
-    setCurrentScreen('app'); // Go directly to main app after signup
+    setCurrentScreen('app');
   };
 
   const handleGoToSignUp = () => {
@@ -36,17 +33,15 @@ export function App() {
     setCurrentScreen('login');
   };
 
-  // Show signup screen
   if (currentScreen === 'signup') {
     return (
-      <SignUpScreen 
+      <SignUpPage 
         onSuccess={handleSignUpSuccess}
         onGoToLogin={handleGoToLogin}
       />
     );
   }
 
-  // Show login screen
   if (currentScreen === 'login') {
     return (
       <LoginScreen 
@@ -56,11 +51,12 @@ export function App() {
     );
   }
 
-  // Show main app navigation after successful login/signup
   return (
-    <NavigationContainer>
-      <AppNavigator />
-    </NavigationContainer>
+    <UserProvider userId={currentUserId}>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </UserProvider>
   );
 }
 
@@ -79,4 +75,3 @@ export default App;
 npm install @react-navigation/native
 npm install react-native-screens react-native-safe-area-context react-native-gesture-handler react-native-reanimated react-native-get-random-values react-native-vector-icons
 npm install @react-navigation/stack @react-navigation/bottom-tabs */
-

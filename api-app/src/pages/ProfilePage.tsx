@@ -1,52 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { Event } from '../../types';
 import { EventItemComponent } from '../components/EventItem';
 import { EventModal } from '../components/EventModal';
-
-//sample data (to be replaced with API data)
-const dummySavedEvents: Event[] = [
-    { id: '1', name: 'Jazz Festival', date: '2025-09-25', city: 'San Francisco', category: 'Music' },
-];
+import { getSavedEventsForUser, removeSavedEventForUser } from '../db/database';
+import { useUser } from '../contexts/UserContext';
 
 /** user profile page showing saved events and "save the dates" feature */
 export function ProfilePage() {
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
     const [dates, setDates] = useState<string[]>([]);
     const [newDate, setNewDate] = useState('');
+    const [savedEvents, setSavedEvents] = useState<Event[]>([]);
+    const { userId } = useUser();
+
+    // Load saved events when component mounts or userId changes
+    useEffect(() => {
+        if (userId) {
+            loadSavedEvents();
+        }
+    }, [userId]);
+
+    const loadSavedEvents = async () => {
+        if (!userId) return;
+        
+        try {
+            const dbSavedEvents = await getSavedEventsForUser(userId);
+            const events = dbSavedEvents.map((row: any) => row.event_data);
+            setSavedEvents(events);
+        } catch (error) {
+            console.error('Error loading saved events:', error);
+        }
+    };
+
+    const handleRemoveEvent = async (eventId: string) => {
+        if (!userId) return;
+        
+        try {
+            await removeSavedEventForUser(userId, eventId);
+            loadSavedEvents(); // Reload the list
+        } catch (error) {
+            console.error('Error removing event:', error);
+        }
+    };
 
     return (
         <View style={styles.container}>
-        //Header with settings icon
+            {/* Header with settings icon */}
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Username's Profile~</Text>
+                <Text style={styles.headerTitle}>Your Profile</Text>
                 <TouchableOpacity>
-            //TO DO: add ability to change username/password or add user preferences here
+                    {/* TO DO: add ability to change username/password or add user preferences here */}
                     <Text style={styles.settingsIcon}>⚙️</Text>
                 </TouchableOpacity>
             </View>
 
-        //Saved Events
+        {/*saved events list*/}
             <Text style={styles.sectionTitle}>Your saved events:</Text>
-            {dummySavedEvents.length === 0 ? (
+            {savedEvents.length === 0 ? (
                 <Text style={styles.emptyText}>No events saved yet</Text>
             ) : (
                 <FlatList
-                    data={dummySavedEvents}
+                    data={savedEvents}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => setSelectedEvent(item)}>
-                            // filters data into EventItemComponent for cleaner display
+                        <TouchableOpacity 
+                            onPress={() => setSelectedEvent(item)}
+                            onLongPress={() => handleRemoveEvent(item.id)}
+                        >
+                            {/*filters data into EventItemComponent for cleaner display*/}
                             <EventItemComponent event={item} />
                         </TouchableOpacity>
                     )}
                 />
             )}
 
-            <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+            <EventModal 
+                event={selectedEvent} 
+                onClose={() => setSelectedEvent(null)}
+                onEventSaved={() => loadSavedEvents()} // Reload when event is saved
+            />
 
-        //Save the Dates
-        //TO DO: change to date type instead of strings
+        {/*save the dates feature*/}
+        {/*to do: change to date type instead of strings*/}
             <Text style={styles.sectionTitle}>Your save the dates:</Text>
             <Text style={styles.helperText}>Add dates you're free so we can recommend events</Text>
 
@@ -68,7 +104,7 @@ export function ProfilePage() {
                 />
             </View>
 
-    // Display saved dates with delete option
+    {/*display saved dates with delete option*/}
             {dates.map((date, index) => (
                 <View key={index} style={styles.dateRow}>
                     <Text>{date}</Text>
