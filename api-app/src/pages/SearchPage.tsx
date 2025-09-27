@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { debugDatabase } from '../db/database';
 
 /** allow users to search by event name, location, date, category, and radius*/
 export function SearchPage({ navigation }: any) {
@@ -7,8 +8,14 @@ export function SearchPage({ navigation }: any) {
     const [showRadius, setShowRadius] = useState(false);
     const [keyword, setKeyword] = useState("");
 
+    useEffect(() => {
+        testDB();
+      }, []);
+    
+
     // Event Name and Location always visible; Date, Category, and Radius collapsible
     return (
+        /* Event Name and Location always visible; Date, Category, and Radius collapsible */
         <View style={styles.container}>
             <Text style={styles.header}>Search all events:</Text>
 
@@ -20,9 +27,17 @@ export function SearchPage({ navigation }: any) {
                 placeholder="Enter event name"
             />
             {/*TO DO: add auto-fill for city names?*/}
-            <Text>Location:</Text>
+            <Text>Event name:</Text>
+            
             <TextInput style={styles.input} />
 
+            {/* TO DO: add auto-fill for city names? */}
+
+            <Text>Location:</Text>
+
+            <TextInput style={styles.input} />
+
+        {/* Collapsible Date */}
             <TouchableOpacity onPress={() => setShowDate(!showDate)}>
                 <Text style={styles.collapsibleLabel}>Event date ▼</Text>
             </TouchableOpacity>
@@ -33,6 +48,7 @@ export function SearchPage({ navigation }: any) {
                 />
             )}
 
+        {/* Collapsible Category */}
             <Text style={styles.collapsibleLabel}>Category ▼</Text>
             <TextInput
                 placeholder="(pick later from API categories)"
@@ -40,6 +56,8 @@ export function SearchPage({ navigation }: any) {
             />
 
             {/*TO DO: add slider ui for radius*/}
+        {/* Collapsible Radius */}
+            {/* TO DO: add slider ui for radius */}
             <TouchableOpacity onPress={() => setShowRadius(!showRadius)}>
                 <Text style={styles.collapsibleLabel}>Radius ▼</Text>
             </TouchableOpacity>
@@ -80,3 +98,9 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
 }); 
+
+
+const testDB = async () => {
+  const result = await debugDatabase();
+  console.log('Database debug result:', result);
+};
