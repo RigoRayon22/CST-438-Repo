@@ -4,8 +4,6 @@ import { debugDatabase } from '../db/database';
 
 /** allow users to search by event name, location, date, category, and radius*/
 export function SearchPage({ navigation }: any) {
-    const [showDate, setShowDate] = useState(false);
-    const [showRadius, setShowRadius] = useState(false);
     const [keyword, setKeyword] = useState("");
 
     useEffect(() => {
@@ -13,9 +11,7 @@ export function SearchPage({ navigation }: any) {
       }, []);
     
 
-    // Event Name and Location always visible; Date, Category, and Radius collapsible
     return (
-        /* Event Name and Location always visible; Date, Category, and Radius collapsible */
         <View style={styles.container}>
             <Text style={styles.header}>Search all events:</Text>
 
@@ -26,47 +22,6 @@ export function SearchPage({ navigation }: any) {
                 onChangeText={setKeyword}
                 placeholder="Enter event name"
             />
-            {/*TO DO: add auto-fill for city names?*/}
-            <Text>Event name:</Text>
-            
-            <TextInput style={styles.input} />
-
-            {/* TO DO: add auto-fill for city names? */}
-
-            <Text>Location:</Text>
-
-            <TextInput style={styles.input} />
-
-        {/* Collapsible Date */}
-            <TouchableOpacity onPress={() => setShowDate(!showDate)}>
-                <Text style={styles.collapsibleLabel}>Event date ▼</Text>
-            </TouchableOpacity>
-            {showDate && (
-                <TextInput
-                    placeholder="Enter date"
-                    style={styles.input}
-                />
-            )}
-
-        {/* Collapsible Category */}
-            <Text style={styles.collapsibleLabel}>Category ▼</Text>
-            <TextInput
-                placeholder="(pick later from API categories)"
-                style={styles.input}
-            />
-
-            {/*TO DO: add slider ui for radius*/}
-        {/* Collapsible Radius */}
-            {/* TO DO: add slider ui for radius */}
-            <TouchableOpacity onPress={() => setShowRadius(!showRadius)}>
-                <Text style={styles.collapsibleLabel}>Radius ▼</Text>
-            </TouchableOpacity>
-            {showRadius && (
-                <TextInput
-                    placeholder="Miles willing to travel"
-                    style={styles.input}
-                />
-            )}
 
             <Button
                 title="Search"
