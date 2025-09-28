@@ -1,15 +1,20 @@
 import React from 'react';
-import { Modal, View, Text, Button, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { Modal, View, Text, Button, TouchableOpacity, StyleSheet, Linking, Alert } from 'react-native';
 import { Event } from '../../types';
+import { saveEventForUser } from '../db/database';
+import { useUser } from '../contexts/UserContext';
 
 // Props (inputs) for EventModal: takes an Event (or null) and a function to close the modal
 interface EventModalProps {
     event: Event | null;
     onClose: () => void;
+    onEventSaved?: () => void;
 }
 
 /** modal component for event details (when event is clicked) */
-export function EventModal({ event, onClose }: EventModalProps) {
+export function EventModal({ event, onClose, onEventSaved }: EventModalProps) {
+    const { userId } = useUser();
+    
     if (!event) return null;
 
     const venue = event._embedded?.venues?.[0];
@@ -38,7 +43,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
     }
 
     return (
-        <Modal transparent={true} animationType="slide" visible={! !event}>
+        <Modal transparent={true} animationType="slide" visible={!!event}>
             <View style={styles.overlay}>
                 <View style={styles.modalContainer}>
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -60,7 +65,25 @@ export function EventModal({ event, onClose }: EventModalProps) {
                             <Text style={[styles.details, styles.link]}>🎟️ Get Tickets</Text>
                         </TouchableOpacity>
                     )}
-                    <Button title="⭐ Save Event" onPress={() => { }} />
+                    <Button 
+                        title="⭐ Save Event" 
+                        onPress={async () => {
+                            if (!userId) {
+                                Alert.alert('Error', 'You must be logged in to save events');
+                                return;
+                            }
+                            
+                            try {
+                                await saveEventForUser(userId, event.id, event);
+                                Alert.alert('Success', 'Event saved!');
+                                if (onEventSaved) {
+                                    onEventSaved(); // Refresh the profile page
+                                }
+                            } catch (error) {
+                                Alert.alert('Error', 'Could not save event');
+                            }
+                        }} 
+                    />
                 </View>
             </View>
         </Modal>
@@ -72,7 +95,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000088)',
+        backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalContainer: {
         backgroundColor: 'white',

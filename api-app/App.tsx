@@ -1,14 +1,18 @@
-// App.tsx
-import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppNavigator } from './src/navigation/AppNavigator';
-import LoginPage from './src/pages/LoginPage';
-import SignUpPage from './src/pages/SignupPage';
+import React, { useState, useEffect } from 'react';
+import { initDatabase } from './src/db/database';
+import LoginScreen from './src/pages/LoginPage';
+import SignUpPage from './src/pages/SignUpPage';
+import { UserProvider } from './src/contexts/UserContext';
 
-/** Main app component setting up navigation */
 export function App() {
-  const [currentScreen, setCurrentScreen] = useState<'login' | 'signup' | 'app'>('app');
+  useEffect(() => {
+    initDatabase().catch(console.error);
+  }, []);
+
+  const [currentScreen, setCurrentScreen] = useState<'login' | 'signup' | 'app'>('login');
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
   const handleLoginSuccess = (userId: number) => {
@@ -21,26 +25,51 @@ export function App() {
     setCurrentScreen('app');
   };
 
-  const handleGoToSignUp = () => setCurrentScreen('signup');
-  const handleGoToLogin = () => setCurrentScreen('login');
+  const handleGoToSignUp = () => {
+    setCurrentScreen('signup');
+  };
+
+  const handleGoToLogin = () => {
+    setCurrentScreen('login');
+  };
 
   if (currentScreen === 'signup') {
-    return <SignUpPage onSuccess={handleSignUpSuccess} onGoToLogin={handleGoToLogin} />;
+    return (
+      <SignUpPage 
+        onSuccess={handleSignUpSuccess}
+        onGoToLogin={handleGoToLogin}
+      />
+    );
   }
 
   if (currentScreen === 'login') {
-    return <LoginPage onSuccess={handleLoginSuccess} onGoToSignUp={handleGoToSignUp} />;
+    return (
+      <LoginScreen 
+        onSuccess={handleLoginSuccess}
+        onGoToSignUp={handleGoToSignUp}
+      />
+    );
   }
 
   return (
-    <NavigationContainer>
-      <AppNavigator />
-    </NavigationContainer>
+    <UserProvider userId={currentUserId}>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </UserProvider>
   );
 }
 
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
+export default App;
 
 /* had to run these commands in api-app directory to fix errors:
 npm install @react-navigation/native

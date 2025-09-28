@@ -1,4 +1,4 @@
- import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -11,62 +11,37 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 // Import your database functions
-import { getAllUsers } from '../db/database';
-
-// Type for user from database
-type User = { id: number; username: string; password: string };
+import { addUser } from '../db/database';
 
 const APP_TAG = 'ECHOHUB';
 
-// LoginScreen Component
-function LoginScreen({
+// SignUp Component
+function SignUpScreen({
   onSuccess,
-  onGoToSignUp,
+  onGoToLogin,
 }: {
   onSuccess?: (userId: number) => void | Promise<void>;
-  onGoToSignUp?: () => void;
+  onGoToLogin?: () => void;
 }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [users, setUsers] = useState<User[]>([]);
 
-  // Find user by username from database users
-  const userByName = useMemo(
-    () =>
-      users.find(
-        (u) => u.username.toLowerCase() === username.trim().toLowerCase()
-      ) ?? null,
-    [username, users]
-  );
-
-  // Check user credentials
-  const checkUser = async () => {
+  // Handle user registration
+  const handleSignUp = async () => {
     try {
-      // Get all users from database
-      const dbUsers = await getAllUsers() as User[];
-      setUsers(dbUsers);
-      
       // Basic validation
       if (!username.trim()) return showToast('Username cannot be blank');
       if (!password.trim()) return showToast('Password cannot be blank');
       
-      // Check if user exists in database
-      const foundUser = dbUsers.find(
-        (u) => u.username.toLowerCase() === username.trim().toLowerCase()
-      );
+      // Add user to database with username and password
+      const userId = await addUser(username.trim(), password.trim());
       
-      if (!foundUser) return showToast(`No user ${username} found`);
-      
-      // Check password
-      if (password !== foundUser.password) return showToast('Invalid password');
-      
-      // Success!
-      showToast('Signed in successfully!');
-      await onSuccess?.(foundUser.id);
+      showToast('Account created successfully!');
+      await onSuccess?.(Number(userId));
       
     } catch (error) {
-      console.error('Login error:', error);
-      showToast('Login failed. Please try again.');
+      console.error('Sign up error:', error);
+      showToast('Sign up failed. Please try again.');
     }
   };
 
@@ -74,7 +49,7 @@ function LoginScreen({
     <SafeAreaView style={s.safe}>
       <StatusBar style="dark" />
       <Text style={s.brand}>EchoHub</Text>
-      <Text style={s.heading}>Sign in</Text>
+      <Text style={s.heading}>Sign up</Text>
 
       {/* Username input field */}
       <View style={s.field}>
@@ -100,31 +75,19 @@ function LoginScreen({
           placeholder="Enter password"
           style={s.input}
           returnKeyType="done"
-          onSubmitEditing={checkUser}
+          onSubmitEditing={handleSignUp}
         />
       </View>
 
-      {/* Sign in button */}
-      <Pressable style={s.button} onPress={checkUser} accessibilityLabel="Sign in">
-        <Text style={s.buttonText}>Sign in</Text>
+      {/* Sign up button */}
+      <Pressable style={s.button} onPress={handleSignUp} accessibilityLabel="Sign up">
+        <Text style={s.buttonText}>Sign up</Text>
       </Pressable>
 
-      {/* Sign up link */}
-      <Pressable onPress={onGoToSignUp} style={s.link}>
-        <Text style={s.linkText}>Don't have an account? Sign up here</Text>
+      {/* Back to login link */}
+      <Pressable onPress={onGoToLogin} style={s.link}>
+        <Text style={s.linkText}>Already have an account? Sign in here</Text>
       </Pressable>
-      
-      {/* Debug info - shows current users in database */}
-      {users.length > 0 && (
-        <View style={s.debugContainer}>
-          <Text style={s.debugTitle}>Available Users:</Text>
-          {users.map((user) => (
-            <Text key={user.id} style={s.debugText}>
-              Username: {user.username}
-            </Text>
-          ))}
-        </View>
-      )}
     </SafeAreaView>
   );
 }
@@ -170,24 +133,6 @@ const s = StyleSheet.create({
 
   link: { alignSelf: 'center', padding: 8 },
   linkText: { color: '#2563eb', fontWeight: '600', fontSize: 14 },
-
-  // Debug styles - shows available users
-  debugContainer: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#f9fafb',
-    borderRadius: 8,
-  },
-  debugTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 5,
-  },
-  debugText: {
-    fontSize: 12,
-    color: '#6b7280',
-  },
 });
 
-export default LoginScreen;
+export default SignUpScreen;
