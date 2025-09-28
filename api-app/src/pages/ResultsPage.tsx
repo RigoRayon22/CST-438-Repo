@@ -25,10 +25,6 @@ export function ResultsPage({ navigation, route }: any) {
 
     return (
         <View style={styles.container}>
-            {/*Link back to search page to update search criteria*/}
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={styles.backLink}>← Update search</Text>
-            </TouchableOpacity>
             <Text style={styles.header}>Search Results</Text>
 
             <FlatList

@@ -9,8 +9,6 @@ import { useUser } from '../contexts/UserContext';
 /** user profile page showing saved events and "save the dates" feature */
 export function ProfilePage() {
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-    const [dates, setDates] = useState<string[]>([]);
-    const [newDate, setNewDate] = useState('');
     const [savedEvents, setSavedEvents] = useState<Event[]>([]);
     const { userId } = useUser();
 
@@ -49,10 +47,6 @@ export function ProfilePage() {
             {/* Header with settings icon */}
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>Your Profile</Text>
-                <TouchableOpacity>
-                    {/* TO DO: add ability to change username/password or add user preferences here */}
-                    <Text style={styles.settingsIcon}>⚙️</Text>
-                </TouchableOpacity>
             </View>
 
         {/*saved events list*/}
@@ -80,39 +74,6 @@ export function ProfilePage() {
                 onClose={() => setSelectedEvent(null)}
                 onEventSaved={() => loadSavedEvents()} // Reload when event is saved
             />
-
-        {/*save the dates feature*/}
-        {/*to do: change to date type instead of strings*/}
-            <Text style={styles.sectionTitle}>Your save the dates:</Text>
-            <Text style={styles.helperText}>Add dates you're free so we can recommend events</Text>
-
-            <View style={styles.inputRow}>
-                <TextInput
-                    placeholder="Enter date"
-                    value={newDate}
-                    onChangeText={setNewDate}
-                    style={styles.dateInput}
-                />
-                <Button
-                    title="Add"
-                    onPress={() => {
-                        if (newDate) {
-                            setDates([...dates, newDate]);
-                            setNewDate('');
-                        }
-                    }}
-                />
-            </View>
-
-    {/*display saved dates with delete option*/}
-            {dates.map((date, index) => (
-                <View key={index} style={styles.dateRow}>
-                    <Text>{date}</Text>
-                    <TouchableOpacity onPress={() => setDates(dates.filter((_, i) => i !== index))}>
-                        <Text style={styles.deleteIcon}>❌</Text>
-                    </TouchableOpacity>
-                </View>
-            ))}
         </View>
     );
 }

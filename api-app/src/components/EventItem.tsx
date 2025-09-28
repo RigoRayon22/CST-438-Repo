@@ -14,13 +14,11 @@ export function EventItemComponent({ event }: EventItemProps) {
 
     return (
         <View style={styles.itemContainer}>
-            <Text style={styles.icon}>🎵</Text>
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{event.name}</Text>
                 <Text style={styles.details}>
                     {date} • {city}</Text>
             </View>
-            <Text style={styles.icon}>⭐</Text>
         </View>
     );
 }

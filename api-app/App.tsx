@@ -4,7 +4,7 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 import React, { useState, useEffect } from 'react';
 import { initDatabase } from './src/db/database';
 import LoginScreen from './src/pages/LoginPage';
-import SignUpPage from './src/pages/SignUpPage';
+import SignUpPage from './src/pages/SignupPage';
 import { UserProvider } from './src/contexts/UserContext';
 
 export function App() {
