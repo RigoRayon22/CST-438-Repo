@@ -12,8 +12,6 @@ User can:
 - View their profile page, which lists all the events they favorited
 - [API](https://developer.ticketmaster.com/products-and-docs/apis/getting-started/)
 
-We got styling help for this document from this guide
-
 ## Introduction
 - How was communication managed - slack group message, github issue comments, in class check-ins  
 - How many stories/issues were initially considered - 22  
